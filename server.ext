@@ -1,0 +1,8 @@
+[server]
+extendedKeyUsage=serverAuth
+keyUsage=digitalSignature,keyEncipherment
+subjectAltName=@alt_names
+
+[alt_names]
+IP.1 = 
+DNS.1 = 
