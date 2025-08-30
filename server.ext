@@ -4,5 +4,5 @@ keyUsage=digitalSignature,keyEncipherment
 subjectAltName=@alt_names
 
 [alt_names]
-IP.1 = 
-DNS.1 = 
+IP.1 = ENV_SERVER_IP
+DNS.1 = ENV_SERVER_DNS
