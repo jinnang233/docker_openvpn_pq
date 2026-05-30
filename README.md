@@ -28,9 +28,11 @@ starting the server. Do not bake generated private keys into a published image.
 - `server.conf` is copied as `/server.conf` and installed into the OpenVPN data
   directory when needed.
 - `gen_cert.sh` creates the CA, server key/certificate, `ta.key`, and OpenVPN
-  runtime files under `/etc/openvpn`.
+  runtime files under `/etc/openvpn`. It refuses to overwrite existing server
+  credentials unless `FORCE=1` is set.
 - `gen_client.sh [client-id]` creates client credentials under
-  `/etc/openvpn/clients/<client-id>`.
+  `/etc/openvpn/clients/<client-id>`. It refuses to overwrite an existing
+  client unless `FORCE=1` is set.
 - `server.ext` and `client.ext` define certificate extensions.
 - `serverstart.sh` configures forwarding/NAT and starts OpenVPN.
 
@@ -100,7 +102,8 @@ docker run -d --name openvpn-pq \
 ```
 
 `SUB_IP_RANGE` defaults to `10.192.0.0/24`. If the container's outbound
-interface is not `eth0`, set `OUT_IFACE` as well.
+interface is not `eth0`, set `OUT_IFACE` as well. If you change the OpenVPN
+address pool in `server.conf`, set `SUB_IP_RANGE` to the matching CIDR.
 
 ## Notes
 

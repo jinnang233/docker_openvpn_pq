@@ -1,6 +1,6 @@
 [server]
 extendedKeyUsage=serverAuth
-keyUsage=digitalSignature,keyEncipherment
+keyUsage=digitalSignature
 subjectAltName=@alt_names
 
 [alt_names]

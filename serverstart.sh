@@ -4,7 +4,7 @@ set -euo pipefail
 
 SUB_IP_RANGE="${SUB_IP_RANGE:-10.192.0.0/24}"
 OUT_IFACE="${OUT_IFACE:-eth0}"
-OPENVPN_DIR="${OPENVPN_DIR:-/etc/openvpn}"
+OPENVPN_DIR="/etc/openvpn"
 
 mkdir -p "${OPENVPN_DIR}"
 

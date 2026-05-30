@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-OPENVPN_DIR="${OPENVPN_DIR:-/etc/openvpn}"
+OPENVPN_DIR="/etc/openvpn"
 CLIENT_ID="${1:-${CLIENT_ID:-client-${RANDOM}}}"
 
 case "${CLIENT_ID}" in
@@ -25,6 +25,13 @@ done
 
 mkdir -p "${OPENVPN_DIR}/ccd" "${CLIENT_DIR}"
 cd "${CLIENT_DIR}"
+
+for generated_file in client.key client.crt; do
+  if [ -e "${generated_file}" ] && [ "${FORCE:-0}" != "1" ]; then
+    echo "Refusing to overwrite ${CLIENT_DIR}/${generated_file}. Set FORCE=1 to regenerate this client." >&2
+    exit 1
+  fi
+done
 
 openssl genpkey -algorithm ML-DSA-87 -out client.key
 openssl req -new -key client.key -out client.csr -subj "/CN=${CLIENT_CN}"

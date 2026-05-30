@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-OPENVPN_DIR="${OPENVPN_DIR:-/etc/openvpn}"
 SERVER_EXT_TEMPLATE="${SERVER_EXT_TEMPLATE:-/server.ext}"
 SERVER_CONF_TEMPLATE="${SERVER_CONF_TEMPLATE:-/server.conf}"
+OPENVPN_DIR="/etc/openvpn"
 SERVER_EXT="${OPENVPN_DIR}/server.ext"
 
 : "${ENV_SERVER_IP:?Set ENV_SERVER_IP to the server IP address used in the certificate SAN.}"
@@ -12,6 +12,13 @@ SERVER_EXT="${OPENVPN_DIR}/server.ext"
 
 mkdir -p "${OPENVPN_DIR}/ccd"
 cd "${OPENVPN_DIR}"
+
+for generated_file in ca.key ca.crt server.key server.crt ta.key; do
+  if [ -e "${generated_file}" ] && [ "${FORCE:-0}" != "1" ]; then
+    echo "Refusing to overwrite ${OPENVPN_DIR}/${generated_file}. Set FORCE=1 to regenerate server credentials." >&2
+    exit 1
+  fi
+done
 
 if [ ! -f server.conf ] && [ -f "${SERVER_CONF_TEMPLATE}" ]; then
   cp "${SERVER_CONF_TEMPLATE}" server.conf
@@ -33,4 +40,3 @@ sed \
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3650 -extensions server -extfile "${SERVER_EXT}"
 
 echo "generated in ${OPENVPN_DIR}: ca.key, ca.crt, server.key, server.crt"
-
