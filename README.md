@@ -16,10 +16,17 @@ The image uses:
 - `tls-groups SecP384r1MLKEM1024`
 - `tun` networking with iptables NAT
 
+## Certificate Safety
+
+The Docker image does not include generated CA, server, or client certificates.
+Generate them yourself with `/gen_cert.sh` in a persistent volume before
+starting the server. Do not bake generated private keys into a published image.
+
 ## Files
 
 - `Dockerfile` builds the OpenVPN runtime image.
-- `server.conf` is copied to `/etc/openvpn/server.conf` in the image.
+- `server.conf` is copied as `/server.conf` and installed into the OpenVPN data
+  directory when needed.
 - `gen_cert.sh` creates the CA, server key/certificate, `ta.key`, and OpenVPN
   runtime files under `/etc/openvpn`.
 - `gen_client.sh [client-id]` creates client credentials under

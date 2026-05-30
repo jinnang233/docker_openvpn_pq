@@ -6,9 +6,18 @@ SUB_IP_RANGE="${SUB_IP_RANGE:-10.192.0.0/24}"
 OUT_IFACE="${OUT_IFACE:-eth0}"
 OPENVPN_DIR="${OPENVPN_DIR:-/etc/openvpn}"
 
+mkdir -p "${OPENVPN_DIR}"
+
 if [ ! -f "${OPENVPN_DIR}/server.conf" ] && [ -f /server.conf ]; then
   cp /server.conf "${OPENVPN_DIR}/server.conf"
 fi
+
+for required_file in ca.crt server.crt server.key ta.key; do
+  if [ ! -f "${OPENVPN_DIR}/${required_file}" ]; then
+    echo "Missing ${OPENVPN_DIR}/${required_file}. Run /gen_cert.sh with a persistent volume first." >&2
+    exit 1
+  fi
+done
 
 ensure_rule() {
   local table="${1}"

@@ -14,7 +14,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY server.conf /server.conf
-COPY server.conf /etc/openvpn/server.conf
 COPY server.ext /server.ext
 COPY client.ext /client.ext
 COPY gen_cert.sh /gen_cert.sh
@@ -24,4 +23,3 @@ COPY serverstart.sh /serverstart.sh
 RUN chmod +x /gen_cert.sh /gen_client.sh /serverstart.sh
 
 CMD ["/serverstart.sh"]
-
