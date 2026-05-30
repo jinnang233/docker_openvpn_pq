@@ -29,12 +29,19 @@ The image uses:
 
 ## Build
 
+The published image is:
+
+```sh
+ghcr.io/jinnang233/docker_openvpn_pq
+```
+
+To build the image locally:
+
 ```sh
 docker build -t docker-openvpn-pq .
 ```
 
-The default base image is `docker.m.daocloud.io/debian:13`. To use another
-Debian 13 image:
+The default base image is `debian:13`. To use another Debian 13 image:
 
 ```sh
 docker build --build-arg DEBIAN_IMAGE=debian:13 -t docker-openvpn-pq .
@@ -56,7 +63,7 @@ docker run --rm \
   -v openvpn-pq-data:/etc/openvpn \
   -e ENV_SERVER_IP=203.0.113.10 \
   -e ENV_SERVER_DNS=vpn.example.com \
-  docker-openvpn-pq /gen_cert.sh
+  ghcr.io/jinnang233/docker_openvpn_pq /gen_cert.sh
 ```
 
 ## Generate Client Certificates
@@ -64,7 +71,7 @@ docker run --rm \
 ```sh
 docker run --rm \
   -v openvpn-pq-data:/etc/openvpn \
-  docker-openvpn-pq /gen_client.sh alice
+  ghcr.io/jinnang233/docker_openvpn_pq /gen_client.sh alice
 ```
 
 Client files are written to `/etc/openvpn/clients/alice` inside the mounted
@@ -82,7 +89,7 @@ docker run -d --name openvpn-pq \
   -p 31194:31194/tcp \
   -v openvpn-pq-data:/etc/openvpn \
   -e SUB_IP_RANGE=10.192.0.0/24 \
-  docker-openvpn-pq
+  ghcr.io/jinnang233/docker_openvpn_pq
 ```
 
 `SUB_IP_RANGE` defaults to `10.192.0.0/24`. If the container's outbound
