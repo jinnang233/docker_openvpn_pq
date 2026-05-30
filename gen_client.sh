@@ -1,16 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-folder_num=${RANDOM}
-mkdir -p /etc/openvpn/clients/${folder_num}
-cd /etc/openvpn/clients/${folder_num}
+set -euo pipefail
 
-openssl genpkey -algorithm ML-DSA-87 -out /etc/openvpn/clients/${folder_num}/client.key
-openssl req -new -key /etc/openvpn/clients/${folder_num}/client.key -out /etc/openvpn/clients/${folder_num}/client.csr -subj "/CN=MyVPN-Client-${folder_num}"
-openssl x509 -req -in client.csr -CA /etc/openvpn/ca.crt -CAkey /etc/openvpn/ca.key -CAcreateserial -out /etc/openvpn/clients/${folder_num}/client.crt -extensions client -extfile /client.ext
+OPENVPN_DIR="${OPENVPN_DIR:-/etc/openvpn}"
+CLIENT_ID="${1:-${CLIENT_ID:-client-${RANDOM}}}"
 
-cp /etc/openvpn/ca.crt /etc/openvpn/clients/${folder_num}/ca.crt
-cp /etc/openvpn/ta.key /etc/openvpn/clients/${folder_num}/ta.key
+case "${CLIENT_ID}" in
+  ''|*[!A-Za-z0-9._-]*)
+    echo "Client ID must contain only letters, numbers, dots, underscores, or hyphens." >&2
+    exit 1
+    ;;
+esac
 
-touch /etc/openvpn/ccd/MyVPN-Client-${folder_num}
+CLIENT_DIR="${OPENVPN_DIR}/clients/${CLIENT_ID}"
+CLIENT_CN="MyVPN-Client-${CLIENT_ID}"
+CLIENT_EXT="${CLIENT_EXT:-/client.ext}"
 
-echo "generated in ${folder_num}: client.key, client.crt"
+for required_file in "${OPENVPN_DIR}/ca.crt" "${OPENVPN_DIR}/ca.key" "${OPENVPN_DIR}/ta.key"; do
+  if [ ! -f "${required_file}" ]; then
+    echo "Missing ${required_file}. Run /gen_cert.sh first." >&2
+    exit 1
+  fi
+done
+
+mkdir -p "${OPENVPN_DIR}/ccd" "${CLIENT_DIR}"
+cd "${CLIENT_DIR}"
+
+openssl genpkey -algorithm ML-DSA-87 -out client.key
+openssl req -new -key client.key -out client.csr -subj "/CN=${CLIENT_CN}"
+openssl x509 -req -in client.csr -CA "${OPENVPN_DIR}/ca.crt" -CAkey "${OPENVPN_DIR}/ca.key" -CAcreateserial -out client.crt -extensions client -extfile "${CLIENT_EXT}"
+
+cp "${OPENVPN_DIR}/ca.crt" "${OPENVPN_DIR}/ta.key" "${CLIENT_DIR}/"
+
+touch "${OPENVPN_DIR}/ccd/${CLIENT_CN}"
+
+echo "generated in ${CLIENT_DIR}: client.key, client.crt"
