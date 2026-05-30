@@ -1,4 +1,4 @@
-ARG DEBIAN_IMAGE=docker.m.daocloud.io/debian:13
+ARG DEBIAN_IMAGE=debian:13
 FROM ${DEBIAN_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,5 +24,4 @@ COPY serverstart.sh /serverstart.sh
 RUN chmod +x /gen_cert.sh /gen_client.sh /serverstart.sh
 
 CMD ["/serverstart.sh"]
-
 
