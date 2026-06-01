@@ -2,6 +2,30 @@
 
 set -euo pipefail
 
+cat >&2 <<'EOF'
+======================================================================
+  WARNING: AI-GENERATED CODE - REVIEW BEFORE USE
+======================================================================
+
+  This script and related configuration were generated with AI assistance.
+
+  Review and test the code, configuration, cryptographic choices, and
+  deployment commands carefully before using them. You are responsible
+  for confirming that they are correct, secure, and appropriate for your
+  environment.
+
+  For better assurance, clone this repository, review the code yourself,
+  and build the Docker image locally before using it.
+
+  If you discover any code security issues, or any copyright or licensing
+  concerns, please report them in Issues.
+
+  Thank you for your understanding.
+
+======================================================================
+
+EOF
+
 SUB_IP_RANGE="${SUB_IP_RANGE:-10.192.0.0/24}"
 OUT_IFACE="${OUT_IFACE:-eth0}"
 OPENVPN_DIR="/etc/openvpn"
