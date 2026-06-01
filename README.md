@@ -10,6 +10,8 @@ group settings.
 > your environment.
 >
 > For better assurance, we recommend cloning this repository, reviewing the code yourself, and building the Docker image locally before using it.
+>
+> If you discover any code security issues, or any copyright or licensing concerns, please report them in Issues. Thank you for your understanding.
 
 The image uses:
 
