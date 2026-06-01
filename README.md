@@ -8,6 +8,8 @@ group settings.
 > cryptographic choices, and deployment commands carefully before using it. You
 > are responsible for confirming that it is correct, secure, and appropriate for
 > your environment.
+>
+> For better assurance, we recommend cloning this repository, reviewing the code yourself, and building the Docker image locally before using it.
 
 The image uses:
 
